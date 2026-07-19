@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Task Manager</title>
+	<style>
+		:root {
+			--bg: #f4f7fb;
+			--card: #ffffff;
+			--text: #1b2430;
+			--muted: #6b7380;
+			--accent: #2f80ed;
+			--accent-hover: #1f6fd6;
+			--border: #dbe2ec;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(180deg, #eef3fb 0%, var(--bg) 100%);
+			color: var(--text);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 24px;
+		}
+
+		.app {
+			width: min(520px, 100%);
+			background: var(--card);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			box-shadow: 0 12px 30px rgba(26, 46, 74, 0.08);
+			padding: 24px;
+		}
+
+		h1 {
+			margin: 0 0 6px;
+			font-size: 1.6rem;
+		}
+
+		.subtitle {
+			margin: 0 0 18px;
+			color: var(--muted);
+			font-size: 0.95rem;
+		}
+
+		.task-form {
+			display: flex;
+			gap: 10px;
+			margin-bottom: 18px;
+		}
+
+		.task-form input {
+			flex: 1;
+			padding: 10px 12px;
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			font-size: 1rem;
+			outline: none;
+		}
+
+		.task-form input:focus {
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.14);
+		}
+
+		.task-form button {
+			border: none;
+			border-radius: 8px;
+			background: var(--accent);
+			color: #fff;
+			font-size: 0.95rem;
+			font-weight: 600;
+			padding: 0 16px;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+
+		.task-form button:hover {
+			background: var(--accent-hover);
+		}
+
+		.task-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: grid;
+			gap: 8px;
+		}
+
+		.task-item {
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			padding: 10px 12px;
+			background: #fbfcff;
+		}
+
+		.empty {
+			color: var(--muted);
+			font-style: italic;
+		}
+	</style>
+</head>
+<body>
+	<main class="app">
+		<h1>Task Manager</h1>
+		<p class="subtitle">Add tasks below and see them listed instantly.</p>
+
+		<form id="taskForm" class="task-form">
+			<input id="taskInput" type="text" placeholder="Enter a task" aria-label="Task" required>
+			<button type="submit">Add</button>
+		</form>
+
+		<ul id="taskList" class="task-list"></ul>
+	</main>
+
+	<script>
+		const taskForm = document.getElementById("taskForm");
+		const taskInput = document.getElementById("taskInput");
+		const taskList = document.getElementById("taskList");
+		const tasks = [];
+
+		function renderTasks() {
+			taskList.innerHTML = "";
+
+			if (tasks.length === 0) {
+				const emptyItem = document.createElement("li");
+				emptyItem.className = "empty";
+				emptyItem.textContent = "No tasks yet. Add your first task.";
+				taskList.appendChild(emptyItem);
+				return;
+			}
+
+			tasks.forEach((taskText) => {
+				const item = document.createElement("li");
+				item.className = "task-item";
+				item.textContent = taskText;
+				taskList.appendChild(item);
+			});
+		}
+
+		taskForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+			const value = taskInput.value.trim();
+
+			if (!value) {
+				return;
+			}
+
+			tasks.push(value);
+			taskInput.value = "";
+			taskInput.focus();
+			renderTasks();
+		});
+
+		renderTasks();
+	</script>
+</body>
+</html>
